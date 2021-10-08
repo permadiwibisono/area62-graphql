@@ -1,8 +1,9 @@
+import db from "../schema/db"
 import { CountrySeeder } from "./country.seeder"
 import { PostalCodeSeeder } from "./postalCode.seeder"
 import { CitySeeder } from "./city.seeder"
 import { ProvinceSeeder } from "./province.seeder"
-import db from "../schema/db"
+import { DistrictOneSeeder } from "./districtOne.seeder"
 
 const seed = async () => {
   try {
@@ -10,7 +11,8 @@ const seed = async () => {
     const countries = await CountrySeeder(orm.em)
     await PostalCodeSeeder(orm.em)
     const provinces = await ProvinceSeeder(orm.em, countries)
-    await CitySeeder(orm.em, provinces)
+    const cities = await CitySeeder(orm.em, provinces)
+    await DistrictOneSeeder(orm.em, cities)
     await orm.close()
   } catch (error) {
     console.log(error)

@@ -22,7 +22,8 @@
     "build-ts": "tsc",
     "build": "yarn clean && yarn build-ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "orm:seed": "node ./dist/seeds"
   },
   "mikro-orm": {
     "useTsNode": true,

@@ -1,8 +1,8 @@
 import csv from "csv-parser"
 import { Connection, EntityManager, IDatabaseDriver } from "@mikro-orm/core"
+import { DistrictOne } from "../schema/entities/districtOne.entity"
 import { City } from "../schema/entities/city.entity"
 import { request } from "../utils/stream"
-import { Province } from "../schema/entities/province.entity"
 
 interface Row {
   Name: string
@@ -14,34 +14,36 @@ interface Row {
 }
 
 export const url =
-  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/cities.csv"
+  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/subDistricts.csv"
 
-export const CitySeeder = async (
+export const DistrictOneSeeder = async (
   em: EntityManager<IDatabaseDriver<Connection>>,
-  provinces: Province[]
+  cities: City[]
 ) => {
-  const results: City[] = []
+  const results: DistrictOne[] = []
   const res = await request(url)
   const connection = em.getConnection()
   await em.begin()
-  await connection.execute('ALTER TABLE "city" DISABLE TRIGGER ALL;')
-  await connection.execute('TRUNCATE table "city" RESTART IDENTITY CASCADE;')
-  await connection.execute('ALTER TABLE "city" ENABLE TRIGGER ALL;')
-  return new Promise<City[]>((resolve, reject) => {
+  await connection.execute('ALTER TABLE "districtOne" DISABLE TRIGGER ALL;')
+  await connection.execute(
+    'TRUNCATE table "districtOne" RESTART IDENTITY CASCADE;'
+  )
+  await connection.execute('ALTER TABLE "districtOne" ENABLE TRIGGER ALL;')
+  return new Promise<DistrictOne[]>((resolve, reject) => {
     res.data
       .pipe(csv())
       .on("data", (data: Row) => {
-        const province = provinces.find((i) => i.code === data.Parent)
-        if (province) {
-          const city = em.create(City, {
-            province,
+        const city = cities.find((i) => i.code === data.Parent)
+        if (city) {
+          const districtOne = em.create(DistrictOne, {
+            city,
             name: data.Name,
             code: data.Code,
             postal: data.Postal,
             lt: data.Latitude,
             ln: data.Longitude,
           })
-          results.push(city)
+          results.push(districtOne)
         }
       })
       .on("end", async () => {
