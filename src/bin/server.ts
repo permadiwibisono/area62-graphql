@@ -12,8 +12,8 @@ const app = new App();
 // prettier-ignore
 (async () => {
   try {
+    await app.connect()
     await app.init()
-    console.log("booted")
   } catch (error) {
     console.log("error boot app: ", error)
   }

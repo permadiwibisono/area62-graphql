@@ -1,4 +1,5 @@
 import express from "express"
+import "express-async-errors"
 import { Server } from "http"
 import compression from "compression"
 import cors from "cors"
@@ -10,15 +11,23 @@ import { graphqlHTTP } from "express-graphql"
 import playground from "graphql-playground-middleware-express"
 import { GraphQLSchema } from "graphql"
 import { buildSchema } from "type-graphql"
-import { HomeResolver } from "./schema/resolvers"
+import { MikroORM, IDatabaseDriver, Connection } from "@mikro-orm/core"
+import {
+  CountryResolver,
+  HomeResolver,
+  PostalCodeResolver,
+} from "./schema/resolvers"
+import db from "./schema/db"
+import { GraphQLContext } from "./types"
 
 export default class App {
-  public host: express.Application
+  public host = express()
 
   public server: Server
 
+  public orm: MikroORM<IDatabaseDriver<Connection>>
+
   public init = async (): Promise<void> => {
-    this.host = express()
     try {
       this.host.enable("trust proxy")
       this.host.use(compression())
@@ -44,26 +53,48 @@ export default class App {
         //  apply to all requests
         this.host.use(limiter)
       }
+
       if (this.host.get("env") !== "production") {
         this.host.get("/graphql", playground({ endpoint: "/graphql" }))
       }
+
       const schema: GraphQLSchema = await buildSchema({
-        resolvers: [HomeResolver],
+        resolvers: [HomeResolver, CountryResolver, PostalCodeResolver],
         dateScalarMode: "isoDate",
         validate: false,
       })
+
       this.host.post(
         "/graphql",
-        graphqlHTTP(() => ({
+        express.json(),
+        graphqlHTTP((req, res) => ({
           schema,
+          context: { req, res, em: this.orm.em.fork() } as GraphQLContext,
           customFormatErrorFn: (error) => {
             throw error
           },
         }))
       )
+
+      this.host.use(
+        (
+          error: Error,
+          _req: express.Request,
+          res: express.Response,
+          // eslint-disable-next-line
+          _next: express.NextFunction
+        ): void => {
+          console.error("📌 Something went wrong", error)
+          res.status(400).json(error)
+        }
+      )
     } catch (error) {
       console.log("Error was occurred", error)
       throw error
     }
+  }
+
+  public connect = async () => {
+    this.orm = await db.connect()
   }
 }
