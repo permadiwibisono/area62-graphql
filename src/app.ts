@@ -15,6 +15,7 @@ import { MikroORM, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import {
   CityResolver,
   CountryResolver,
+  DistrictOneResolver,
   HomeResolver,
   PostalCodeResolver,
   ProvinceResolver,
@@ -66,6 +67,7 @@ export default class App {
           CountryResolver,
           ProvinceResolver,
           CityResolver,
+          DistrictOneResolver,
           PostalCodeResolver,
         ],
         dateScalarMode: "isoDate",
