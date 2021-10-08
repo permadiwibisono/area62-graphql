@@ -13,9 +13,11 @@ import { GraphQLSchema } from "graphql"
 import { buildSchema } from "type-graphql"
 import { MikroORM, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import {
+  CityResolver,
   CountryResolver,
   HomeResolver,
   PostalCodeResolver,
+  ProvinceResolver,
 } from "./schema/resolvers"
 import db from "./schema/db"
 import { GraphQLContext } from "./types"
@@ -59,7 +61,13 @@ export default class App {
       }
 
       const schema: GraphQLSchema = await buildSchema({
-        resolvers: [HomeResolver, CountryResolver, PostalCodeResolver],
+        resolvers: [
+          HomeResolver,
+          CountryResolver,
+          ProvinceResolver,
+          CityResolver,
+          PostalCodeResolver,
+        ],
         dateScalarMode: "isoDate",
         validate: false,
       })

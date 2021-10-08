@@ -8,4 +8,10 @@ export class PostalCodeResolver {
   postalCodes(@Ctx() { em }: GraphQLContext): Promise<PostalCode[]> {
     return em.find(PostalCode, {})
   }
+
+  @Query(() => Number)
+  async postalCodeCount(@Ctx() { em }: GraphQLContext) {
+    const total = await em.count(PostalCode, {})
+    return total
+  }
 }

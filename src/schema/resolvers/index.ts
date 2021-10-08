@@ -1,3 +1,5 @@
 export * from "./country.resolver"
 export * from "./home.resolver"
 export * from "./postalCode.resolver"
+export * from "./province.resolver"
+export * from "./city.resolver"
