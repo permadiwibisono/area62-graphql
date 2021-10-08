@@ -1,5 +1,5 @@
 import csv from "csv-parser"
-import { Connection, EntityManager, IDatabaseDriver } from "@mikro-orm/core"
+import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import { DistrictOne } from "../schema/entities/districtOne.entity"
 import { City } from "../schema/entities/city.entity"
 import { request } from "../utils/stream"
@@ -17,13 +17,13 @@ export const url =
   "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/subDistricts.csv"
 
 export const DistrictOneSeeder = async (
-  em: EntityManager<IDatabaseDriver<Connection>>,
-  cities: City[]
+  em: EntityManager<IDatabaseDriver<Connection>>
 ) => {
   const results: DistrictOne[] = []
   const res = await request(url)
   const connection = em.getConnection()
   await em.begin()
+  const cities = await em.find(City, {})
   await connection.execute('ALTER TABLE "districtOne" DISABLE TRIGGER ALL;')
   await connection.execute(
     'TRUNCATE table "districtOne" RESTART IDENTITY CASCADE;'

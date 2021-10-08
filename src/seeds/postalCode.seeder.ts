@@ -1,5 +1,5 @@
 import csv from "csv-parser"
-import { Connection, EntityManager, IDatabaseDriver } from "@mikro-orm/core"
+import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import { request } from "../utils/stream"
 import { PostalCode } from "../schema/entities/postalCode.entity"
 

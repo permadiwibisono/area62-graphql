@@ -1,5 +1,5 @@
 import csv from "csv-parser"
-import { Connection, EntityManager, IDatabaseDriver } from "@mikro-orm/core"
+import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import { request } from "../utils/stream"
 import { Country } from "../schema/entities/country.entity"
 
@@ -44,7 +44,6 @@ export const CountrySeeder = async (
         res.data.destroy()
       })
       .on("error", async (err: any) => {
-        console.log("error....", err)
         await em.rollback()
         return reject(err)
       })

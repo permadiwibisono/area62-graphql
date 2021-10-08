@@ -1,8 +1,8 @@
 import csv from "csv-parser"
 import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core"
-import { City } from "../schema/entities/city.entity"
+import { DistrictOne } from "../schema/entities/districtOne.entity"
 import { request } from "../utils/stream"
-import { Province } from "../schema/entities/province.entity"
+import { DistrictTwo } from "../schema/entities/districtTwo.entity"
 
 interface Row {
   Name: string
@@ -14,34 +14,36 @@ interface Row {
 }
 
 export const url =
-  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/cities.csv"
+  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/villages.csv"
 
-export const CitySeeder = async (
+export const DistrictTwoSeeder = async (
   em: EntityManager<IDatabaseDriver<Connection>>
 ) => {
-  const results: City[] = []
+  const results: DistrictTwo[] = []
   const res = await request(url)
   const connection = em.getConnection()
   await em.begin()
-  const provinces = await em.find(Province, {})
-  await connection.execute('ALTER TABLE "city" DISABLE TRIGGER ALL;')
-  await connection.execute('TRUNCATE table "city" RESTART IDENTITY CASCADE;')
-  await connection.execute('ALTER TABLE "city" ENABLE TRIGGER ALL;')
-  return new Promise<City[]>((resolve, reject) => {
+  const districts = await em.find(DistrictOne, {})
+  await connection.execute('ALTER TABLE "districtTwo" DISABLE TRIGGER ALL;')
+  await connection.execute(
+    'TRUNCATE table "districtTwo" RESTART IDENTITY CASCADE;'
+  )
+  await connection.execute('ALTER TABLE "districtTwo" ENABLE TRIGGER ALL;')
+  return new Promise<DistrictTwo[]>((resolve, reject) => {
     res.data
       .pipe(csv())
       .on("data", (data: Row) => {
-        const province = provinces.find((i) => i.code === data.Parent)
-        if (province) {
-          const city = em.create(City, {
-            province,
+        const districtOne = districts.find((i) => i.code === data.Parent)
+        if (districtOne) {
+          const districtTwo = em.create(DistrictTwo, {
+            districtOne,
             name: data.Name,
             code: data.Code,
             postal: data.Postal,
             lt: data.Latitude,
             ln: data.Longitude,
           })
-          results.push(city)
+          results.push(districtTwo)
         }
       })
       .on("end", async () => {
