@@ -10,4 +10,11 @@ export class Migration20211007124244 extends Migration {
       'alter table "province" add constraint "province_countryID_foreign" foreign key ("countryID") references "country" ("id") on update cascade on delete cascade;'
     )
   }
+
+  async down(): Promise<void> {
+    this.addSql(
+      'alter table "province" drop constraint "province_countryID_foreign";'
+    )
+    this.addSql('drop table "province";')
+  }
 }
