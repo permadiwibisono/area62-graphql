@@ -8,12 +8,13 @@ interface Row {
   Code: string
 }
 
+export const url =
+  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/postalCodes.csv"
+
 export const PostalCodeSeeder = async (
   em: EntityManager<IDatabaseDriver<Connection>>
 ) => {
   const results: PostalCode[] = []
-  const url =
-    "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/postalCodes.csv"
   const res = await request(url)
   const connection = em.getConnection()
   await em.begin()

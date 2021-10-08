@@ -10,12 +10,13 @@ interface Row {
   Longitude: string | null
 }
 
+export const url =
+  "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/countries.csv"
+
 export const CountrySeeder = async (
   em: EntityManager<IDatabaseDriver<Connection>>
 ) => {
   const results: Country[] = []
-  const url =
-    "https://github.com/ArrayAccess/Indonesia-Postal-And-Area/raw/master/data/csv/62/countries.csv"
   const res = await request(url)
   const connection = em.getConnection()
   await em.begin()
