@@ -1,6 +1,14 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core"
+import {
+  Cascade,
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  Property,
+} from "@mikro-orm/core"
 import { ObjectType, Field } from "type-graphql"
 import BaseEntity from "./base"
+import { DistrictOne } from "./districtOne.entity"
 import { Province } from "./province.entity"
 
 @ObjectType()
@@ -29,4 +37,15 @@ export class City extends BaseEntity<City> {
   @Field(() => Province)
   @ManyToOne(() => Province, { onDelete: "cascade", fieldName: "provinceID" })
   public province: Province
+
+  @Field(() => [DistrictOne!])
+  @OneToMany(
+    () => DistrictOne,
+    (districtOne: DistrictOne) => districtOne.city,
+    {
+      cascade: [Cascade.ALL],
+      fieldName: "cityID",
+    }
+  )
+  public districtOnes = new Collection<DistrictOne>(this)
 }
