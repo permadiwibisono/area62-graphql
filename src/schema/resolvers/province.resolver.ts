@@ -19,11 +19,17 @@ export class ProvinceResolver {
 
   @FieldResolver()
   country(@Root() province: Province, @Ctx() { em }: GraphQLContext) {
+    if (province.country.isInitialized()) {
+      return province.country
+    }
     return em.findOneOrFail(Country, { id: province.country.id })
   }
 
   @FieldResolver()
   cities(@Root() province: Province, @Ctx() { em }: GraphQLContext) {
+    if (province.cities.isInitialized()) {
+      return province.cities
+    }
     return em.find(City, { province: { id: province.id } })
   }
 }

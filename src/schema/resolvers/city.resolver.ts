@@ -18,6 +18,9 @@ export class CityResolver {
 
   @FieldResolver()
   province(@Root() city: City, @Ctx() { em }: GraphQLContext) {
+    if (city.province.isInitialized()) {
+      return city.province
+    }
     return em.findOneOrFail(Province, { id: city.province.id })
   }
 }

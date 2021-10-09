@@ -18,6 +18,9 @@ export class DistrictTwoResolver {
 
   @FieldResolver()
   districtOne(@Root() districtTwo: DistrictTwo, @Ctx() { em }: GraphQLContext) {
+    if (districtTwo.districtOne.isInitialized()) {
+      return districtTwo.districtOne
+    }
     return em.findOneOrFail(DistrictOne, { id: districtTwo.districtOne.id })
   }
 }
