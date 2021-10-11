@@ -1,5 +1,5 @@
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql"
-import { parseFilterInput } from "../../utils/query"
+import { parseFilterInput } from "../../utils"
 import { GraphQLContext } from "../../types"
 import { Country } from "../entities/country.entity"
 import { Province } from "../entities/province.entity"

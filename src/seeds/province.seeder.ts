@@ -1,6 +1,6 @@
 import csv from "csv-parser"
 import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core"
-import { request } from "../utils/stream"
+import { request } from "../utils"
 import { Province } from "../schema/entities/province.entity"
 import { Country } from "../schema/entities/country.entity"
 
