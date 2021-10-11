@@ -46,7 +46,6 @@ The above GraphQL query will produce the following JSON response:
             "name": "KEPULAUAN MENTAWAI",
             "postal": "25700,25300"
           },
-          //...
         ]
       }
     ]
@@ -126,9 +125,9 @@ yarn start
 
 ## Idea & Inspiration:
 
-Big thanks for this repo and tutorials
+Big thanks for this repos and tutorials
 
-1. [Countries GraphQL API] (https://github.com/trevorblades/countries)
-2. [INDONESIA POSTAL CODE & AREA] (https://github.com/ArrayAccess/Indonesia-Postal-And-Area)
-3. [TypeGraphql + MikroORM Example] (https://github.com/MichalLytek/type-graphql/blob/master/examples/mikro-orm)
-4. [Graphql + MikroORM Example] (https://github.com/driescroons/mikro-orm-graphql-example)
+1. [Countries GraphQL API](https://github.com/trevorblades/countries)
+2. [INDONESIA POSTAL CODE & AREA](https://github.com/ArrayAccess/Indonesia-Postal-And-Area)
+3. [TypeGraphql + MikroORM Example](https://github.com/MichalLytek/type-graphql/blob/master/examples/mikro-orm)
+4. [Graphql + MikroORM Example](https://github.com/driescroons/mikro-orm-graphql-example)
