@@ -9,7 +9,7 @@ import rateLimit from "express-rate-limit"
 import hpp from "hpp"
 import { graphqlHTTP } from "express-graphql"
 import playground from "graphql-playground-middleware-express"
-import { GraphQLSchema } from "graphql"
+import { GraphQLError, GraphQLSchema } from "graphql"
 import { buildSchema } from "type-graphql"
 import { MikroORM, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import {
@@ -108,18 +108,22 @@ export default class App {
             next(error)
           } else {
             logger.error(error, "📌 Something went wrong")
-            const result: {
-              message: string
-              statusCode: number
-              stack?: string
-            } = {
-              message: error.message || "Internal server error",
-              statusCode: error.status || 500,
+            if (error instanceof GraphQLError) {
+              res.status(400).json(error)
+            } else {
+              const result: {
+                message: string
+                statusCode: number
+                stack?: string
+              } = {
+                message: error.message || "Internal server error",
+                statusCode: error.status || 500,
+              }
+              if (appConfig.stage === "local") {
+                result.stack = error.stack
+              }
+              res.status(result.statusCode).json({ error: result })
             }
-            if (appConfig.stage === "local") {
-              result.stack = error.stack
-            }
-            res.status(result.statusCode).json({ error: result })
           }
         }
       )

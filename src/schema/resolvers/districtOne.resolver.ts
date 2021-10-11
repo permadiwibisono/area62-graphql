@@ -1,18 +1,45 @@
-import { Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql"
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql"
+import { parseFilterInput } from "../../utils"
 import { GraphQLContext } from "../../types"
 import { City } from "../entities/city.entity"
 import { DistrictOne } from "../entities/districtOne.entity"
+import { DistrictOneInput } from "../inputs/districtOne.input"
 
 @Resolver(() => DistrictOne)
 export class DistrictOneResolver {
   @Query(() => [DistrictOne!])
-  districtOnes(@Ctx() { em }: GraphQLContext): Promise<DistrictOne[]> {
-    return em.find(DistrictOne, {})
+  districtOnes(
+    @Arg("filter") filter: DistrictOneInput,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<DistrictOne[]> {
+    return em.find(DistrictOne, parseFilterInput<DistrictOne>(filter))
+  }
+
+  @Query(() => DistrictOne)
+  districtOne(
+    @Arg("id") id: number,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<DistrictOne> {
+    return em.findOneOrFail(DistrictOne, { id })
+  }
+
+  @Query(() => DistrictOne)
+  districtOneByCode(
+    @Arg("code") code: string,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<DistrictOne> {
+    return em.findOneOrFail(DistrictOne, { code })
   }
 
   @Query(() => Number)
-  async districtOneCount(@Ctx() { em }: GraphQLContext) {
-    const total = await em.count(DistrictOne, {})
+  async districtOneCount(
+    @Arg("filter", { nullable: true }) filter: DistrictOneInput,
+    @Ctx() { em }: GraphQLContext
+  ) {
+    const total = await em.count(
+      DistrictOne,
+      parseFilterInput<DistrictOne>(filter)
+    )
     return total
   }
 
