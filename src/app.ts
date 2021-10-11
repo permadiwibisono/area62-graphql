@@ -1,12 +1,12 @@
-import express from "express"
 import "express-async-errors"
+import express from "express"
+import createError, { HttpError } from "http-errors"
 import { Server } from "http"
 import compression from "compression"
 import cors from "cors"
 import helmet from "helmet"
 import rateLimit from "express-rate-limit"
 import hpp from "hpp"
-import morgan from "morgan"
 import { graphqlHTTP } from "express-graphql"
 import playground from "graphql-playground-middleware-express"
 import { GraphQLSchema } from "graphql"
@@ -23,6 +23,9 @@ import {
 } from "./schema/resolvers"
 import db from "./schema/db"
 import { GraphQLContext } from "./types"
+import { loggerMiddleware as httpLogger } from "./middlewares/logger.middleware"
+import { logger } from "./utils"
+import { appConfig } from "./config"
 
 export default class App {
   public host = express()
@@ -44,11 +47,7 @@ export default class App {
         })
       )
       this.host.use(hpp())
-      this.host.use(
-        morgan(
-          "[:date[iso]] :method :url :status :res[content-length] - :response-time ms"
-        )
-      )
+      this.host.use(httpLogger)
       if (this.host.get("env") === "production") {
         const limiter = rateLimit({
           windowMs: 15 * 60 * 1000,
@@ -90,23 +89,48 @@ export default class App {
 
       this.host.use(
         (
-          error: Error,
-          _req: express.Request,
+          _: express.Request,
+          _0: express.Response,
+          next: express.NextFunction
+        ) => {
+          next(createError(404, "Resource not found"))
+        }
+      )
+
+      this.host.use(
+        (
+          error: HttpError,
+          _: express.Request,
           res: express.Response,
-          // eslint-disable-next-line
-          _next: express.NextFunction
+          next: express.NextFunction
         ): void => {
-          console.error("📌 Something went wrong", error)
-          res.status(400).json(error)
+          if (res.headersSent) {
+            next(error)
+          } else {
+            logger.error(error, "📌 Something went wrong")
+            const result: {
+              message: string
+              statusCode: number
+              stack?: string
+            } = {
+              message: error.message || "Internal server error",
+              statusCode: error.status || 500,
+            }
+            if (appConfig.stage === "local") {
+              result.stack = error.stack
+            }
+            res.status(result.statusCode).json({ error: result })
+          }
         }
       )
     } catch (error) {
-      console.log("Error was occurred", error)
+      logger.error(error, "Error was occurred")
       throw error
     }
   }
 
   public connect = async () => {
     this.orm = await db.connect()
+    logger.info("DB was established succesfully")
   }
 }
