@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/permadiwibisono/area62-graphql#readme",
   "scripts": {
+    "prepare": "husky install",
     "start": "node ./dist/bin/server",
     "dev": "nodemon ./dist/bin/server | pino-pretty",
     "clean": "rimraf dist",
@@ -26,6 +27,12 @@
     "db:seed": "node ./dist/seeds",
     "db:migrate": "node ./dist/migrate",
     "db:migrate:ts": "ts-node ./src/migrate"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   },
   "mikro-orm": {
     "useTsNode": true,
@@ -50,6 +57,8 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.2.3",
     "nodemon": "^2.0.13",
     "pino-pretty": "^7.0.1",
     "prettier": "^2.4.1",
