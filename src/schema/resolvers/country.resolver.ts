@@ -18,6 +18,14 @@ export class CountryResolver {
     })
   }
 
+  @Query(() => Country)
+  country(
+    @Arg("code") code: string,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<Country> {
+    return em.findOneOrFail(Country, { code })
+  }
+
   @Query(() => Number)
   async countryCount(
     @Arg("filter", { nullable: true }) filter: CountryInput,
