@@ -1,10 +1,14 @@
 /* eslint-disable no-console */
+import { MikroORM, IDatabaseDriver, Connection } from "@mikro-orm/core"
 import db from "./schema/db"
+
+type ORM = MikroORM<IDatabaseDriver<Connection>> | null
 
 // prettier-ignore
 (async () => {
+  let orm: ORM = null
   try {
-    const orm = await db.connect()
+    orm = await db.connect()
     const migrator = orm.getMigrator()
     const getPending = await migrator.getPendingMigrations()
     if (getPending.length) {
@@ -15,5 +19,7 @@ import db from "./schema/db"
     }
   } catch (error) {
     console.log("error boot app: ", error)
+  } finally {
+    if (orm) orm.close()
   }
 })()

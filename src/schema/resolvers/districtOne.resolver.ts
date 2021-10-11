@@ -4,6 +4,7 @@ import { GraphQLContext } from "../../types"
 import { City } from "../entities/city.entity"
 import { DistrictOne } from "../entities/districtOne.entity"
 import { DistrictOneInput } from "../inputs/districtOne.input"
+import { DistrictTwo } from "../entities/districtTwo.entity"
 
 @Resolver(() => DistrictOne)
 export class DistrictOneResolver {
@@ -49,5 +50,16 @@ export class DistrictOneResolver {
       return districtOne.city
     }
     return em.findOneOrFail(City, { id: districtOne.city.id })
+  }
+
+  @FieldResolver()
+  districtTwos(
+    @Root() districtOne: DistrictOne,
+    @Ctx() { em }: GraphQLContext
+  ) {
+    if (districtOne.districtTwos.isInitialized()) {
+      return districtOne.districtTwos
+    }
+    return em.find(DistrictTwo, { districtOne: { id: districtOne.id } })
   }
 }

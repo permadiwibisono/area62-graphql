@@ -5,7 +5,6 @@ import { Server } from "http"
 import compression from "compression"
 import cors from "cors"
 import helmet from "helmet"
-import rateLimit from "express-rate-limit"
 import hpp from "hpp"
 import { graphqlHTTP } from "express-graphql"
 import playground from "graphql-playground-middleware-express"
@@ -48,16 +47,8 @@ export default class App {
       )
       this.host.use(hpp())
       this.host.use(httpLogger)
-      if (this.host.get("env") === "production") {
-        const limiter = rateLimit({
-          windowMs: 15 * 60 * 1000,
-          max: 100,
-        })
-        //  apply to all requests
-        this.host.use(limiter)
-      }
 
-      if (this.host.get("env") !== "production") {
+      if (appConfig.env !== "production") {
         this.host.get("/graphql", playground({ endpoint: "/graphql" }))
       }
 
@@ -77,7 +68,6 @@ export default class App {
 
       this.host.post(
         "/graphql",
-        express.json(),
         graphqlHTTP((req, res) => ({
           schema,
           context: { req, res, em: this.orm.em.fork() } as GraphQLContext,
@@ -128,7 +118,7 @@ export default class App {
         }
       )
     } catch (error) {
-      logger.error(error, "Error was occurred")
+      logger.error(error, "📌 Error was occurred")
       throw error
     }
   }
