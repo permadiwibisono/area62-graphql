@@ -1,15 +1,15 @@
 # area62-graphql
 
-Indonesia Postal Code &amp; Area in graphql
+🇮🇩 Indonesia Postal Code &amp; Area in graphql
 
 ## Main Schemas:
 
-1. Country (example: INDONESIA)
-2. Province (example: SUMATERA BARAT)
-3. City (example: PADANG)
-4. DistrictOne as Kecamatan in Bahasa (example: PADANG UTARA)
-5. DistrictTwo as Kelurahan in Bahasa (example: LOLONG BELANTI)
-6. PostalCode (example: 25136)
+1. Country (example: `INDONESIA`)
+2. Province (example: `SUMATERA BARAT`)
+3. City (example: `PADANG`)
+4. DistrictOne as Kecamatan in Bahasa (example: `PADANG UTARA`)
+5. DistrictTwo as Kelurahan in Bahasa (example: `LOLONG BELANTI`)
+6. PostalCode (example: `25136`)
 
 ### Writing Queries:
 
@@ -31,7 +31,7 @@ Indonesia Postal Code &amp; Area in graphql
 
 The above GraphQL query will produce the following JSON response:
 
-```graphql
+```json
 {
   "data": {
     "provinces": [
@@ -45,7 +45,7 @@ The above GraphQL query will produce the following JSON response:
             "code": "1301",
             "name": "KEPULAUAN MENTAWAI",
             "postal": "25700,25300"
-          },
+          }
         ]
       }
     ]
@@ -111,6 +111,8 @@ yarn watch
 yarn dev
 ```
 
+GraphQL playground in `http://localhost:5000/graphql`
+
 ### Build
 
 ```bash
@@ -125,7 +127,7 @@ yarn start
 
 ## Idea & Inspiration:
 
-Big thanks for this repos and tutorials
+Big thanks for this repos and tutorials 🍻
 
 1. [Countries GraphQL API](https://github.com/trevorblades/countries)
 2. [INDONESIA POSTAL CODE & AREA](https://github.com/ArrayAccess/Indonesia-Postal-And-Area)
