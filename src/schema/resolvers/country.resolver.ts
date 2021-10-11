@@ -20,6 +20,14 @@ export class CountryResolver {
 
   @Query(() => Country)
   country(
+    @Arg("id") id: number,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<Country> {
+    return em.findOneOrFail(Country, { id })
+  }
+
+  @Query(() => Country)
+  countryByCode(
     @Arg("code") code: string,
     @Ctx() { em }: GraphQLContext
   ): Promise<Country> {

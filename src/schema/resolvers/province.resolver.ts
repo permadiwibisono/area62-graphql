@@ -18,6 +18,14 @@ export class ProvinceResolver {
 
   @Query(() => Province)
   province(
+    @Arg("id") id: number,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<Province> {
+    return em.findOneOrFail(Province, { id })
+  }
+
+  @Query(() => Province)
+  provinceByCode(
     @Arg("code") code: string,
     @Ctx() { em }: GraphQLContext
   ): Promise<Province> {
@@ -25,8 +33,11 @@ export class ProvinceResolver {
   }
 
   @Query(() => Number)
-  async provinceCount(@Ctx() { em }: GraphQLContext) {
-    const total = await em.count(Province, {})
+  async provinceCount(
+    @Arg("filter", { nullable: true }) filter: ProvinceInput,
+    @Ctx() { em }: GraphQLContext
+  ) {
+    const total = await em.count(Province, parseFilterInput<Province>(filter))
     return total
   }
 

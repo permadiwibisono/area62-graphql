@@ -8,7 +8,7 @@ import { PostalInput } from "../inputs/postal.input"
 export class PostalCodeResolver {
   @Query(() => [PostalCode!])
   postalCodes(
-    @Arg("filter") filter: PostalInput,
+    @Arg("filter", { nullable: true }) filter: PostalInput,
     @Ctx() { em }: GraphQLContext
   ): Promise<PostalCode[]> {
     return em.find(PostalCode, parseFilterInput<PostalCode>(filter))
@@ -16,6 +16,14 @@ export class PostalCodeResolver {
 
   @Query(() => PostalCode)
   postalCode(
+    @Arg("id") id: number,
+    @Ctx() { em }: GraphQLContext
+  ): Promise<PostalCode> {
+    return em.findOneOrFail(PostalCode, { id })
+  }
+
+  @Query(() => PostalCode)
+  postalCodeByCode(
     @Arg("code") code: string,
     @Ctx() { em }: GraphQLContext
   ): Promise<PostalCode> {
@@ -23,8 +31,14 @@ export class PostalCodeResolver {
   }
 
   @Query(() => Number)
-  async postalCodeCount(@Ctx() { em }: GraphQLContext) {
-    const total = await em.count(PostalCode, {})
+  async postalCodeCount(
+    @Arg("filter", { nullable: true }) filter: PostalInput,
+    @Ctx() { em }: GraphQLContext
+  ) {
+    const total = await em.count<PostalCode>(
+      PostalCode,
+      parseFilterInput<PostalCode>(filter)
+    )
     return total
   }
 }

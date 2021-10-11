@@ -16,7 +16,12 @@ export class CityResolver {
   }
 
   @Query(() => City)
-  city(
+  city(@Arg("id") id: number, @Ctx() { em }: GraphQLContext): Promise<City> {
+    return em.findOneOrFail(City, { id })
+  }
+
+  @Query(() => City)
+  cityByCode(
     @Arg("code") code: string,
     @Ctx() { em }: GraphQLContext
   ): Promise<City> {
@@ -24,8 +29,11 @@ export class CityResolver {
   }
 
   @Query(() => Number)
-  async cityCount(@Ctx() { em }: GraphQLContext) {
-    const total = await em.count(City, {})
+  async cityCount(
+    @Arg("filter", { nullable: true }) filter: CityInput,
+    @Ctx() { em }: GraphQLContext
+  ) {
+    const total = await em.count(City, parseFilterInput<City>(filter))
     return total
   }
 
