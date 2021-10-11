@@ -23,7 +23,9 @@
     "build": "yarn clean && yarn build-ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "orm:seed": "node ./dist/seeds"
+    "db:seed": "node ./dist/seeds",
+    "db:migrate": "node ./dist/migrate",
+    "db:migrate:ts": "ts-node ./src/migrate"
   },
   "mikro-orm": {
     "useTsNode": true,

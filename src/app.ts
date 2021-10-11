@@ -48,7 +48,7 @@ export default class App {
       this.host.use(hpp())
       this.host.use(httpLogger)
 
-      if (this.host.get("env") !== "production") {
+      if (appConfig.env !== "production") {
         this.host.get("/graphql", playground({ endpoint: "/graphql" }))
       }
 
@@ -68,7 +68,6 @@ export default class App {
 
       this.host.post(
         "/graphql",
-        express.json(),
         graphqlHTTP((req, res) => ({
           schema,
           context: { req, res, em: this.orm.em.fork() } as GraphQLContext,
@@ -119,7 +118,7 @@ export default class App {
         }
       )
     } catch (error) {
-      logger.error(error, "Error was occurred")
+      logger.error(error, "📌 Error was occurred")
       throw error
     }
   }
