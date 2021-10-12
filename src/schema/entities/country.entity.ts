@@ -16,9 +16,33 @@ export class Country extends BaseEntity<Country> {
   @Property()
   code!: string
 
+  @Field(() => String, { nullable: true })
+  @Property({ nullable: true })
+  iso3?: string
+
   @Field()
   @Property()
   name!: string
+
+  @Field()
+  @Property({ fieldName: "emojiU" })
+  phoneCode!: string
+
+  @Field()
+  @Property()
+  capital!: string
+
+  @Field()
+  @Property()
+  currency!: string
+
+  @Field(() => String, { nullable: true })
+  @Property({ nullable: true })
+  emoji?: string
+
+  @Field(() => String, { nullable: true })
+  @Property({ nullable: true, fieldName: "emojiU" })
+  emojiU?: string
 
   @Field(() => String, { nullable: true })
   @Property({ nullable: true })
