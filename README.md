@@ -15,6 +15,13 @@
 
 ```graphql
 {
+  countryByCode(code: "ID") {
+    code
+    iso3
+    name
+    phoneCode
+    emoji
+  }
   provinces(filter: { name: { eq: "SUMATERA BARAT" } }) {
     id
     code
@@ -34,6 +41,13 @@ The above GraphQL query will produce the following JSON response:
 ```json
 {
   "data": {
+    "countryByCode": {
+      "code": "ID",
+      "iso3": "IDN",
+      "name": "INDONESIA",
+      "phoneCode": "62",
+      "emoji": "🇮🇩"
+    },
     "provinces": [
       {
         "id": 3,
