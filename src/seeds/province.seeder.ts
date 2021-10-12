@@ -32,7 +32,7 @@ export const ProvinceSeeder = async (
     res.data
       .pipe(csv())
       .on("data", (data: Row) => {
-        const country = countries.find((i) => i.code === data.Parent)
+        const country = countries.find((i) => i.phoneCode === data.Parent)
         if (country) {
           const province = em.create(Province, {
             country,
