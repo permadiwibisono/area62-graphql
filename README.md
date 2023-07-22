@@ -124,10 +124,6 @@ npm run db:seed
 ### Run server (with `watch`) for development
 
 ```bash
-npm run watch
-```
-
-```bash
 npm run dev
 ```
 
