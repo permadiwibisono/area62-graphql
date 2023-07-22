@@ -25,7 +25,7 @@ export class Country extends BaseEntity<Country> {
   name!: string
 
   @Field()
-  @Property({ fieldName: "emojiU" })
+  @Property({ fieldName: "phoneCode" })
   phoneCode!: string
 
   @Field()

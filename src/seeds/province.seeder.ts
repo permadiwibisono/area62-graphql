@@ -38,8 +38,8 @@ export const ProvinceSeeder = async (
             country,
             name: data.Name,
             code: data.Code,
-            lt: data.Latitude,
-            ln: data.Longitude,
+            lt: data.Latitude || undefined,
+            ln: data.Longitude || undefined,
           })
           results.push(province)
         }
