@@ -10,12 +10,9 @@ export class CountryResolver {
   @Query(() => [Country!])
   countries(
     @Arg("filter", { nullable: true }) filter: CountryInput,
-    @Arg("populate", () => [String], { nullable: true }) populate: string[],
     @Ctx() { em }: GraphQLContext
   ): Promise<Country[]> {
-    return em.find(Country, parseFilterInput<Country>(filter), {
-      populate,
-    })
+    return em.find(Country, parseFilterInput<Country>(filter))
   }
 
   @Query(() => Country)

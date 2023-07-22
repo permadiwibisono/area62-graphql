@@ -1,8 +1,9 @@
-import { BaseEntity, PrimaryKey, Property, wrap } from "@mikro-orm/core"
-import { ObjectType, Field, Int } from "type-graphql"
+import { BaseEntity, Entity, PrimaryKey, Property } from "@mikro-orm/core"
+import { Field, Int, ObjectType } from "type-graphql"
 
+@Entity({ abstract: true })
 @ObjectType({ isAbstract: true })
-export default class Base<T extends { id: number }> extends BaseEntity<
+export default abstract class Base<T extends { id: number }> extends BaseEntity<
   T,
   "id"
 > {
@@ -10,19 +11,11 @@ export default class Base<T extends { id: number }> extends BaseEntity<
   @PrimaryKey()
   id!: number
 
-  @Field(() => Date)
-  @Property({ type: Date })
-  createdAt = new Date()
+  @Field()
+  @Property()
+  createdAt?: Date = new Date()
 
-  @Field(() => Date)
-  @Property({ type: Date, onUpdate: () => new Date() })
-  updatedAt = new Date()
-
-  public toJson() {
-    return wrap(this).toJSON()
-  }
-
-  public toObj(ignoredFields?: string[]) {
-    return wrap(this).toObject(ignoredFields)
-  }
+  @Field()
+  @Property({ onUpdate: () => new Date() })
+  updatedAt?: Date = new Date()
 }

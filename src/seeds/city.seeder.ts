@@ -37,9 +37,9 @@ export const CitySeeder = async (
             province,
             name: data.Name,
             code: data.Code,
-            postal: data.Postal,
-            lt: data.Latitude,
-            ln: data.Longitude,
+            postal: data.Postal || undefined,
+            lt: data.Latitude || undefined,
+            ln: data.Longitude || undefined,
           })
           results.push(city)
         }

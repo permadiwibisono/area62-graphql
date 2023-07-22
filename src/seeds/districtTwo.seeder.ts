@@ -39,9 +39,9 @@ export const DistrictTwoSeeder = async (
             districtOne,
             name: data.Name,
             code: data.Code,
-            postal: data.Postal,
-            lt: data.Latitude,
-            ln: data.Longitude,
+            postal: data.Postal || undefined,
+            lt: data.Latitude || undefined,
+            ln: data.Longitude || undefined,
           })
           results.push(districtTwo)
         }
