@@ -73,7 +73,7 @@ The above GraphQL query will produce the following JSON response:
 
 You may need install some of this:
 
-1. Yarn (I prefer use this instead of npm)
+1. npm (Node version >= 16)
 2. PostgreSQL
 3. clone this repo :)
 
@@ -84,7 +84,7 @@ cp .env.example .env
 ```
 
 ```bash
-yarn install
+npm run install
 ```
 
 Fill with valid values
@@ -104,7 +104,7 @@ npx mikro-orm migration:up
 it will be store as `.ts` in `migration` table
 
 ```bash
-yarn db:migrate:ts
+npm run db:migrate:ts
 ```
 
 #### with _db:migrate_ (in production use)
@@ -112,31 +112,37 @@ yarn db:migrate:ts
 it will be store as `.js` in `migration` table
 
 ```bash
-yarn db:migrate
+npm run db:migrate
+```
+
+### Database Seed
+
+```bash
+npm run db:seed
 ```
 
 ### Run server (with `watch`) for development
 
 ```bash
-yarn watch
+npm run watch
 ```
 
 ```bash
-yarn dev
+npm run dev
 ```
 
-GraphQL playground in `http://localhost:5000/graphql`
+GraphQL playground in `http://localhost:3000/graphql`
 
 ### Build
 
 ```bash
-yarn build
+npm run build
 ```
 
 ### Run server for production
 
 ```bash
-yarn start
+npm start
 ```
 
 ## Idea & Inspiration:
